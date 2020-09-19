@@ -229,7 +229,7 @@ CCSE.launch = function(){
 	
 	CCSE.InitNote = function(){
 		CCSE.iconURL = 'https://klattmose.github.io/CookieClicker/img/CCSEicon.png';
-		CCSE.functionsTotal = 119 + 
+		CCSE.functionsTotal = 121 +
 							(Game.Objects['Wizard tower'].minigameLoaded ? 10 : 0) +
 							(Game.Objects['Temple'].minigameLoaded ? 10 : 0) +
 							(Game.Objects['Farm'].minigameLoaded ? 33 : 0) +
@@ -304,12 +304,37 @@ CCSE.launch = function(){
 		}
 		
 		
-		// Game.WriteSave
-		// This section only exists to support custom seasons
+		// Game.WriteSave, custom season support
 		CCSE.ReplaceCodeIntoFunction('Game.WriteSave', '(Game.season?', '((Game.season)?', 0);
 		CCSE.ReplaceCodeIntoFunction('Game.WriteSave', '(Game.seasonT)', '((Game.season)?Game.seasonT:-1)', 0);
-		
-		
+
+		// Game.WriteSave bug fix:
+		// If type == 1, 2, or 3,
+		// Game.WriteSave returns the save string without changing the local storage.
+		// However, that function always changes Game.toSave and Game.lastDate,
+		// and always calls the functions in Game.customSave.
+		// Changing Game.lastDate is inconsequential,
+		// because this variable is only used when saving and loading the game.
+		// The other two matter; specifically, they modify the game state
+		// (and the customSave functions may write to localStorage)
+		// even when the current save stored in localStorage does not change.
+		// This causes two bugs:
+		// 1. The game might sometimes think that the data was saved (because Game.toSave === false)
+		//    even though no data was written to local storage.
+		// 2. Mods whose save function is pushed to Game.customSave may write to localStorage
+		//    without the game doing the same.
+		//    So, until the next autosave, the game and the mods save data will be out of sync.
+		// Preventing that code to run if type == 1, 2, 3 fixes this.
+		CCSE.ReplaceCodeIntoFunction('Game.WriteSave', 'Game.toSave=false;', `
+			if(type != 1 && type != 2 && type != 3) {
+				Game.toSave=false;
+			}`, 0);
+		CCSE.ReplaceCodeIntoFunction('Game.WriteSave', 'for (var i in Game.customSave) {Game.customSave[i]();}', `
+			if(type != 1 && type != 2 && type != 3) {
+				for (var i in Game.customSave) {Game.customSave[i]();}
+			}`, 0);
+
+
 		// Game.Reset
 		if(!Game.customReset) Game.customReset = [];
 		CCSE.SliceCodeIntoFunction('Game.Reset', -1, `
