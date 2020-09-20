@@ -300,7 +300,13 @@ CCSE.launch = function(){
 		if(!(Game.LoadSave.toString().indexOf('Game.customLoad') > 0)){
 			CCSE.ReplaceCodeIntoFunction('Game.LoadSave', 'if (Game.prefs.showBackupWarning==1)', 
 					`// Game.LoadSave injection point 0
-					for(var i in Game.customLoad) Game.customLoad[i](); `, -1);
+					if(!data) {
+						// If data is available, we consider that this is a vanilla-only load;
+						// otherwise, call the load functions from other mods too.
+						// This allows e.g. CCSE.LoadSave to call Game.LoadSave
+						// without triggering an infinite recursion.
+						for(var i in Game.customLoad) Game.customLoad[i]();
+					}`, -1);
 		}
 		
 		
@@ -2973,6 +2979,10 @@ CCSE.launch = function(){
 		if(!CCSE.save.Buffs) CCSE.save.Buffs = {};
 		if(!CCSE.save.Seasons) CCSE.save.Seasons = {};
 		if(!CCSE.save.OtherMods) CCSE.save.OtherMods = {};
+
+		// No recursion issues arise because Game.LoadSave is being called with a truthy string,
+		// so the code injected in CCSE.ReplaceMainGame won't call customSave.
+		if(CCSE.save.vanillaSave) Game.LoadSave(CCSE.save.vanillaSave);
 		
 		if(CCSE.save.version != CCSE.version){
 			//l('logButton').classList.add('hasUpdate');
