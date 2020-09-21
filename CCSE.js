@@ -2980,9 +2980,14 @@ CCSE.launch = function(){
 		if(!CCSE.save.Seasons) CCSE.save.Seasons = {};
 		if(!CCSE.save.OtherMods) CCSE.save.OtherMods = {};
 
-		// No recursion issues arise because Game.LoadSave is being called with a truthy string,
-		// so the code injected in CCSE.ReplaceMainGame won't call customSave.
-		if(CCSE.save.vanillaSave) Game.LoadSave(CCSE.save.vanillaSave);
+		// Calling Game.LoadSave with a truthy string
+		// prevents the functions in Game.customLoad from being called,
+		// so there is no risk of this function being called again.
+		// Furthermore,
+		// Game.LoadSave only calls the functions in Game.customLoad without arguments,
+		// so `data` being present guarantees that we were _not_ called by Game.LoadSave.
+		// Both of this provisions prevent calling either function twice.
+		if(data && CCSE.save.vanillaSave) Game.LoadSave(CCSE.save.vanillaSave);
 		
 		if(CCSE.save.version != CCSE.version){
 			//l('logButton').classList.add('hasUpdate');
