@@ -2932,7 +2932,7 @@ CCSE.launch = function(){
 		for(var i in CCSE.customSave) CCSE.customSave[i]();
 
 		CCSE.save.vanillaSave = Game.WriteSave(1);
-		// If this function was called by a Game.WriteSave call,
+		// If this function was called by Game.WriteSave,
 		// then we are calling Game.WriteSave twice.
 		// The Game.WriteSave bug fix made in CCSE.ReplaceMainGame makes this harmless.
 		
