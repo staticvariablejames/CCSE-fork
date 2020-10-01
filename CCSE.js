@@ -8,7 +8,8 @@ CCSE.compatName = 'CCSE';
 CCSE.compatVersion = '2.017';
 /* This fork of CCSE is similar enough to the official CCSE
  * that we will actually try to hide this difference from other mods
- * (e.g. in the invocation of CCSE.ConfirmGameCCSEVersion).
+ * (namely, in the invocation of CCSE.ConfirmGameCCSEVersion and family,
+ * and that we use the same localStorage key as the official CCSE).
  */
 
 CCSE.launch = function(){
@@ -2951,7 +2952,7 @@ CCSE.launch = function(){
 		else{
 			str = utf8_to_b64(str) + '!END!';
 			str = escape(str);
-			Game.localStorageSet(CCSE.name, str);
+			Game.localStorageSet(CCSE.compatName, str); // Same storage slot as the official CCSE
 		}
 	}
 	
@@ -2967,7 +2968,7 @@ CCSE.launch = function(){
 			if(data){
 				str = unescape(data);
 			}else{
-				if(Game.localStorageGet(CCSE.name)) str = unescape(Game.localStorageGet(CCSE.name));
+				if(Game.localStorageGet(CCSE.compatName)) str = unescape(Game.localStorageGet(CCSE.compatName));
 			}
 			
 			if(str != ''){
