@@ -4,6 +4,13 @@ CCSE.name = 'CCSE-experimental';
 CCSE.version = '2.experimental.0';
 CCSE.GameVersion = '2.029';
 
+CCSE.compatName = 'CCSE';
+CCSE.compatVersion = '2.017';
+/* This fork of CCSE is similar enough to the official CCSE
+ * that we will actually try to hide this difference from other mods
+ * (e.g. in the invocation of CCSE.ConfirmGameCCSEVersion).
+ */
+
 CCSE.launch = function(){
 	CCSE.loading = 1;
 	
@@ -3345,7 +3352,7 @@ CCSE.launch = function(){
 	
 	CCSE.ConfirmCCSEVersion = function(modName, modVersion, version){
 		var proceed = true;
-		if(CCSE.version != version){
+		if(CCSE.version != version && CCSE.compatVersion != version){
 			proceed = confirm(modName + ' version ' + modVersion + ' is meant for CCSE version ' + version + '.  Loading a different version may cause errors.  Do you still want to load ' + modName + '?');
 		}
 		return proceed;
@@ -3353,13 +3360,13 @@ CCSE.launch = function(){
 	
 	CCSE.ConfirmGameCCSEVersion = function(modName, modVersion, gameVersion, ccseVersion){
 		var proceed = true;
-		if(Game.version != gameVersion && CCSE.version != ccseVersion){
+		if(Game.version != gameVersion && CCSE.version != ccseVersion && CCSE.compatVersion != ccseVersion){
 			proceed = confirm(modName + ' version ' + modVersion + ' is meant for Game version ' + gameVersion + ' and CCSE version ' + ccseVersion + '.  Loading a different version may cause errors.  Do you still want to load ' + modName + '?');
 		}
 		else if(Game.version != gameVersion){
 			proceed = confirm(modName + ' version ' + modVersion + ' is meant for Game version ' + gameVersion + '.  Loading a different version may cause errors.  Do you still want to load ' + modName + '?');
 		}
-		else if(CCSE.version != ccseVersion){
+		else if(CCSE.version != ccseVersion && CCSE.compatVersion != ccseVersion){
 			proceed = confirm(modName + ' version ' + modVersion + ' is meant for CCSE version ' + ccseVersion + '.  Loading a different version may cause errors.  Do you still want to load ' + modName + '?');
 		}
 		return proceed;
