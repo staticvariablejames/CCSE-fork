@@ -15,5 +15,16 @@ function ccseTest() {
 	CCSE.WriteSave();
 	console.assert(window.localStorage.getItem('CCSE') !== testSave);
 
+	// Check whether reloading the CCSE save also reloads the vanilla save
+	Util.wipeSave();
+
+	testSave = CCSE.WriteSave(1);
+	Game.Earn(100);
+	console.assert(Game.cookies == 100);
+	Game.WriteSave();
+	console.assert(window.localStorage.getItem('CCSE') !== testSave);
+	CCSE.LoadSave(testSave);
+	console.assert(Game.cookies == 0);
+
 	console.log("Finished ccseTest()");
 }
