@@ -24,8 +24,6 @@ This makes it harder for the vanilla save and the CCSE save to be out of sync.
 
 - Rudimentary unit testing, in `test.js`.
 
-- Bug fixes (see changelog)
-
 
 Changelog
 =========
@@ -36,3 +34,8 @@ Changelog
 Bug fix:
 Functions in `Game.customAscend` and `Game.customReincarnate`
 were being called even if `bypass != 1`.
+
+2.experimental.1.1
+------------------
+
+Official version it is compatible with bumped to CCSE v2.018.

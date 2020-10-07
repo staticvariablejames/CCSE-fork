@@ -1,11 +1,11 @@
 Game.Win('Third-party');
 if(CCSE === undefined) var CCSE = {};
 CCSE.name = 'CCSE-experimental';
-CCSE.version = '2.experimental.1';
+CCSE.version = '2.experimental.1.1';
 CCSE.GameVersion = '2.029';
 
 CCSE.compatName = 'CCSE';
-CCSE.compatVersion = '2.017';
+CCSE.compatVersion = '2.018';
 /* This fork of CCSE is similar enough to the official CCSE
  * that we will actually try to hide this difference from other mods
  * (namely, in the invocation of CCSE.ConfirmGameCCSEVersion and family,
