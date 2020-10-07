@@ -448,18 +448,18 @@ CCSE.launch = function(){
 		// Game.Reincarnate
 		// Only runs when bypass == 1 (i.e. passed the confirmation prompt)
 		if(!Game.customReincarnate) Game.customReincarnate = [];
-		CCSE.SliceCodeIntoFunction('Game.Reincarnate', -2, `
+		CCSE.SliceCodeIntoFunction('Game.Reincarnate', -1, `
 				// Game.Reincarnate injection point 0
-				for(var i in Game.customReincarnate) Game.customReincarnate[i]();
+				if(bypass == 1) for(var i in Game.customReincarnate) Game.customReincarnate[i]();
 			`);
 		
 		
 		// Game.Ascend
 		// Only runs when bypass == 1 (i.e. passed the confirmation prompt)
 		if(!Game.customAscend) Game.customAscend = [];
-		CCSE.SliceCodeIntoFunction('Game.Ascend', -2, `
+		CCSE.SliceCodeIntoFunction('Game.Ascend', -1, `
 				// Game.Ascend injection point 0
-				for(var i in Game.customAscend) Game.customAscend[i]();
+				if(bypass == 1) for(var i in Game.customAscend) Game.customAscend[i]();
 			`);
 		
 		
