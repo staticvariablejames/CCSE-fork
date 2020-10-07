@@ -23,3 +23,16 @@ Loading that CCSE save then loads the vanilla data too.
 This makes it harder for the vanilla save and the CCSE save to be out of sync.
 
 - Rudimentary unit testing, in `test.js`.
+
+- Bug fixes (see changelog)
+
+
+Changelog
+=========
+
+2.experimental.1
+----------------
+
+Bug fix:
+Functions in `Game.customAscend` and `Game.customReincarnate`
+were being called even if `bypass != 1`.
