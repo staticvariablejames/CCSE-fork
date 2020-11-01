@@ -42,3 +42,8 @@ This made this fork largely irrelevant.
 
 I'm keeping it
 just to have a repository for CCSE which is independent from the other stuff in klattmose.github.io.
+
+2.experimental.2.1
+------------------
+
+Bugfix: was not using `CCSE.compatName` in all the needed places.
