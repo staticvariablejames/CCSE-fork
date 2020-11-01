@@ -1,6 +1,6 @@
 if(CCSE === undefined) var CCSE = {};
 CCSE.name = 'CCSE-experimental';
-CCSE.version = '2.experimental.1.1';
+CCSE.version = '2.experimental.2';
 CCSE.GameVersion = '2.031';
 
 CCSE.compatName = 'CCSE';

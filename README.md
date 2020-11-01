@@ -16,12 +16,6 @@ Features
 so by loading it before any other mods should prevent the official CCSE from being loaded.
 It even uses the same `localStorage` slot!
 
-- The CCSE save now contains a copy of the vanilla save.
-This means that saving the CCSE save to a file
-is enough to save both the vanilla data and the modded data.
-Loading that CCSE save then loads the vanilla data too.
-This makes it harder for the vanilla save and the CCSE save to be out of sync.
-
 - Rudimentary unit testing, in `test.js`.
 
 
@@ -39,3 +33,12 @@ were being called even if `bypass != 1`.
 ------------------
 
 Official version it is compatible with bumped to CCSE v2.018.
+
+2.experimental.2
+----------------
+
+Incorporated changes to CCSE v2.020.
+This made this fork largely irrelevant.
+
+I'm keeping it
+just to have a repository for CCSE which is independent from the other stuff in klattmose.github.io.
