@@ -86,7 +86,7 @@ CCSE.launch = function(){
 	
 	CCSE.finalize = function(){
 		// Load any custom save data and inject save functions
-		if(!Game.modSaveData[CCSE.name]) CCSE.load();
+		if(!Game.modSaveData[CCSE.compatName]) CCSE.load();
 		// Game.customSave.push(CCSE.save);
 		// Game.customLoad.push(function(){CCSE.load();});
 		// Game.customReset.push(CCSE.Reset); Nevermind
@@ -2953,7 +2953,7 @@ CCSE.launch = function(){
 			if(data){ // Has data in game save
 				CCSE.config = JSON.parse(data);
 			}else{ // Look for older save in local storage
-				if(Game.localStorageGet(CCSE.name)) str = unescape(Game.localStorageGet(CCSE.name));
+				if(Game.localStorageGet(CCSE.compatName)) str = unescape(Game.localStorageGet(CCSE.compatName));
 				
 				if(str != ''){
 					str = str.split('!END!')[0];
@@ -3381,7 +3381,7 @@ CCSE.launch = function(){
 	/*=====================================================================================
 	Start your engines
 	=======================================================================================*/
-	if(CCSE.ConfirmGameVersion(CCSE.name, CCSE.version, CCSE.GameVersion)) Game.registerMod(CCSE.name, CCSE); // Calls CCSE.init();
+	if(CCSE.ConfirmGameVersion(CCSE.name, CCSE.version, CCSE.GameVersion)) Game.registerMod(CCSE.compatName, CCSE); // Calls CCSE.init();
 }
 
 if(!CCSE.isLoaded && !CCSE.loading) CCSE.launch();
