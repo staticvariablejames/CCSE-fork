@@ -2361,73 +2361,64 @@ CCSE.launch = function(){
 	}
 	
 	CCSE.ReplacePantheon = function(){
-		// Temporary variable for storing function strings
-		// Slightly more efficient than nesting functions
-		// Doubt it really matters
-		var temp = '';
-		var pos = 0;
-		var proto;
-		var obj;
-		var objKey = 'Temple';
-		var M = Game.Objects[objKey].minigame;
-		
+		var preEvalScript = "var M = Game.Objects['Temple'].minigame;";
 		
 		// M.godTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].godTooltip) Game.customMinigame[objKey].godTooltip = [];
+		if(!Game.customMinigame['Temple'].godTooltip) Game.customMinigame['Temple'].godTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.godTooltip', 'return str', `
 			// M.godTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].godTooltip) str = Game.customMinigame[objKey].godTooltip[i](id, str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Temple'].godTooltip) str = Game.customMinigame['Temple'].godTooltip[i](id, str);`, -1,
+			preEvalScript);
 		
 		
 		// M.slotTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].slotTooltip) Game.customMinigame[objKey].slotTooltip = [];
+		if(!Game.customMinigame['Temple'].slotTooltip) Game.customMinigame['Temple'].slotTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.slotTooltip', 'return str', `
 			// M.slotTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].slotTooltip) str = Game.customMinigame[objKey].slotTooltip[i](id, str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Temple'].slotTooltip) str = Game.customMinigame['Temple'].slotTooltip[i](id, str);`, -1,
+			preEvalScript);
 		
 		
 		// M.useSwap
-		if(!Game.customMinigame[objKey].useSwap) Game.customMinigame[objKey].useSwap = [];
+		if(!Game.customMinigame['Temple'].useSwap) Game.customMinigame['Temple'].useSwap = [];
 		CCSE.SliceCodeIntoFunction('M.useSwap', -1, `
 			// M.useSwap injection point 0
-			for(var i in Game.customMinigame[objKey].useSwap) Game.customMinigame[objKey].useSwap[i](n);
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Temple'].useSwap) Game.customMinigame['Temple'].useSwap[i](n);
+		`, preEvalScript);
 		
 		
 		// M.slotGod
-		if(!Game.customMinigame[objKey].slotGod) Game.customMinigame[objKey].slotGod = [];
+		if(!Game.customMinigame['Temple'].slotGod) Game.customMinigame['Temple'].slotGod = [];
 		CCSE.SliceCodeIntoFunction('M.slotGod', -1, `
 			// M.slotGod injection point 0
-			for(var i in Game.customMinigame[objKey].slotGod) Game.customMinigame[objKey].slotGod[i](god, slot);
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Temple'].slotGod) Game.customMinigame['Temple'].slotGod[i](god, slot);
+		`, preEvalScript);
 		
 		
 		// M.dragGod
-		if(!Game.customMinigame[objKey].dragGod) Game.customMinigame[objKey].dragGod = [];
+		if(!Game.customMinigame['Temple'].dragGod) Game.customMinigame['Temple'].dragGod = [];
 		CCSE.SliceCodeIntoFunction('M.dragGod', -1, `
 			// M.dragGod injection point 0
-			for(var i in Game.customMinigame[objKey].dragGod) Game.customMinigame[objKey].dragGod[i](what);
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Temple'].dragGod) Game.customMinigame['Temple'].dragGod[i](what);
+		`, preEvalScript);
 		
 		
 		// M.dropGod
-		if(!Game.customMinigame[objKey].dropGod) Game.customMinigame[objKey].dropGod = [];
+		if(!Game.customMinigame['Temple'].dropGod) Game.customMinigame['Temple'].dropGod = [];
 		CCSE.SliceCodeIntoFunction('M.dropGod', -1, `
 			// M.dropGod injection point 0
-			for(var i in Game.customMinigame[objKey].dropGod) Game.customMinigame[objKey].dropGod[i]();
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Temple'].dropGod) Game.customMinigame['Temple'].dropGod[i]();
+		`, preEvalScript);
 		
 		
 		// M.hoverSlot
-		if(!Game.customMinigame[objKey].hoverSlot) Game.customMinigame[objKey].hoverSlot = [];
+		if(!Game.customMinigame['Temple'].hoverSlot) Game.customMinigame['Temple'].hoverSlot = [];
 		CCSE.SliceCodeIntoFunction('M.hoverSlot', -1, `
 			// M.hoverSlot injection point 0
-			for(var i in Game.customMinigame[objKey].hoverSlot) Game.customMinigame[objKey].hoverSlot[i](what);
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Temple'].hoverSlot) Game.customMinigame['Temple'].hoverSlot[i](what);
+		`, preEvalScript);
 		
 		
 		// Game.hasGod
@@ -2436,22 +2427,22 @@ CCSE.launch = function(){
 		
 		// M.refillTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].refillTooltip) Game.customMinigame[objKey].refillTooltip = [];
+		if(!Game.customMinigame['Temple'].refillTooltip) Game.customMinigame['Temple'].refillTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.refillTooltip', 'return', 'var str = ', 0,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.refillTooltip', -1, `
 			// M.refillTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].refillTooltip) str = Game.customMinigame[objKey].refillTooltip[i](id, str);
+			for(var i in Game.customMinigame['Temple'].refillTooltip) str = Game.customMinigame['Temple'].refillTooltip[i](id, str);
 			return str;
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+		`, preEvalScript);
 		
 		
 		// M.launch
-		if(M.launch.toString().indexOf('// M.launch injection point 0') == -1){
+		if(Game.Objects['Temple'].minigame.launch.toString().indexOf('// M.launch injection point 0') == -1){
 			CCSE.SliceCodeIntoFunction('M.launch', -1, `
-	// M.launch injection point 0
-	for(var i in Game.customMinigameOnLoad[objKey]) Game.customMinigameOnLoad[objKey][i](M.parent);
-`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+				// M.launch injection point 0
+				for(var i in Game.customMinigameOnLoad['Temple']) Game.customMinigameOnLoad['Temple'][i](M.parent);
+			`, preEvalScript);
 		}
 	}
 	
