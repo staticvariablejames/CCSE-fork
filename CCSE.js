@@ -2069,32 +2069,23 @@ CCSE.launch = function(){
 	}
 	
 	CCSE.ReplaceGrimoire = function(){
-		// Temporary variable for storing function strings
-		// Slightly more efficient than nesting functions
-		// Doubt it really matters
-		var temp = '';
-		var pos = 0;
-		var proto;
-		var obj;
-		var objKey = 'Wizard tower';
-		var M = Game.Objects[objKey].minigame;
-		
-		
+		var preEvalScript = "var M = Game.Objects['Wizard tower'].minigame;";
+
 		// M.computeMagicM
-		if(!Game.customMinigame[objKey].computeMagicM) Game.customMinigame[objKey].computeMagicM = [];
+		if(!Game.customMinigame['Wizard tower'].computeMagicM) Game.customMinigame['Wizard tower'].computeMagicM = [];
 		CCSE.SliceCodeIntoFunction('M.computeMagicM', -1, `
 			// M.computeMagicM injection point 0
-			for(var i in Game.customMinigame[objKey].computeMagicM) Game.customMinigame[objKey].computeMagicM[i]();
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Wizard tower'].computeMagicM) Game.customMinigame['Wizard tower'].computeMagicM[i]();
+		`, preEvalScript);
 		
 		
 		// M.getFailChance
 		// functions should return a value to multiply failChance by (Return 1 for no effect)
-		if(!Game.customMinigame[objKey].getFailChance) Game.customMinigame[objKey].getFailChance = [];
+		if(!Game.customMinigame['Wizard tower'].getFailChance) Game.customMinigame['Wizard tower'].getFailChance = [];
 		CCSE.ReplaceCodeIntoFunction('M.getFailChance', 'return', `
 			// M.getFailChance injection point 0
-			for(var i in Game.customMinigame[objKey].getFailChance) failChance *= Game.customMinigame[objKey].getFailChance[i](spell);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Wizard tower'].getFailChance) failChance *= Game.customMinigame['Wizard tower'].getFailChance[i](spell);`, -1,
+			preEvalScript);
 		
 		
 		// M.castSpell
@@ -2103,67 +2094,67 @@ CCSE.launch = function(){
 		
 		// M.getSpellCost
 		// functions should return a value to multiply out by (Return 1 for no effect)
-		if(!Game.customMinigame[objKey].getSpellCost) Game.customMinigame[objKey].getSpellCost = [];
+		if(!Game.customMinigame['Wizard tower'].getSpellCost) Game.customMinigame['Wizard tower'].getSpellCost = [];
 		CCSE.ReplaceCodeIntoFunction('M.getSpellCost', 'return', `
 			// M.getSpellCost injection point 0
-			for(var i in Game.customMinigame[objKey].getSpellCost) out *= Game.customMinigame[objKey].getSpellCost[i](spell);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Wizard tower'].getSpellCost) out *= Game.customMinigame['Wizard tower'].getSpellCost[i](spell);`, -1,
+			preEvalScript);
 		
 		
 		// M.getSpellCostBreakdown
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].getSpellCostBreakdown) Game.customMinigame[objKey].getSpellCostBreakdown = [];
+		if(!Game.customMinigame['Wizard tower'].getSpellCostBreakdown) Game.customMinigame['Wizard tower'].getSpellCostBreakdown = [];
 		CCSE.ReplaceCodeIntoFunction('M.getSpellCostBreakdown', 'return', `
 			// M.getSpellCostBreakdown injection point 0
-			for(var i in Game.customMinigame[objKey].getSpellCostBreakdown) str = Game.customMinigame[objKey].getSpellCostBreakdown[i](spell, str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Wizard tower'].getSpellCostBreakdown) str = Game.customMinigame['Wizard tower'].getSpellCostBreakdown[i](spell, str);`, -1,
+			preEvalScript);
 		
 		
 		// M.spellTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].spellTooltip) Game.customMinigame[objKey].spellTooltip = [];
+		if(!Game.customMinigame['Wizard tower'].spellTooltip) Game.customMinigame['Wizard tower'].spellTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.spellTooltip', 'return str', `
 			// M.spellTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].spellTooltip) str = Game.customMinigame[objKey].spellTooltip[i](id, str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Wizard tower'].spellTooltip) str = Game.customMinigame['Wizard tower'].spellTooltip[i](id, str);`, -1,
+			preEvalScript);
 		
 		
 		// M.refillTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].refillTooltip) Game.customMinigame[objKey].refillTooltip = [];
+		if(!Game.customMinigame['Wizard tower'].refillTooltip) Game.customMinigame['Wizard tower'].refillTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.refillTooltip', 'return', 'var str = ', 0,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.refillTooltip', -1, `
 			// M.refillTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].refillTooltip) str = Game.customMinigame[objKey].refillTooltip[i](id, str);
+			for(var i in Game.customMinigame['Wizard tower'].refillTooltip) str = Game.customMinigame['Wizard tower'].refillTooltip[i](id, str);
 			return str;
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+		`, preEvalScript);
 		
 		
 		// M.spells['hand of fate'].win
 		// functions should push a value to choices
-		if(!Game.customMinigame[objKey].fateWin) Game.customMinigame[objKey].fateWin = [];
+		if(!Game.customMinigame['Wizard tower'].fateWin) Game.customMinigame['Wizard tower'].fateWin = [];
 		CCSE.ReplaceCodeIntoFunction('M.spells["hand of fate"].win', 'newShimmer.force', 
 					`// M.spells["hand of fate"].win injection point 0
-					for(var i in Game.customMinigame[objKey].fateWin) Game.customMinigame[objKey].fateWin[i](choices);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+					for(var i in Game.customMinigame['Wizard tower'].fateWin) Game.customMinigame['Wizard tower'].fateWin[i](choices);`, -1,
+			preEvalScript);
 		
 		
 		// M.spells['hand of fate'].fail
 		// functions should push a value to choices
-		if(!Game.customMinigame[objKey].fateFail) Game.customMinigame[objKey].fateFail = [];
+		if(!Game.customMinigame['Wizard tower'].fateFail) Game.customMinigame['Wizard tower'].fateFail = [];
 		CCSE.ReplaceCodeIntoFunction('M.spells["hand of fate"].fail', 'newShimmer.force', 
 					`// M.spells["hand of fate"].fail injection point 0
-					for(var i in Game.customMinigame[objKey].fateFail) Game.customMinigame[objKey].fateFail[i](choices);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+					for(var i in Game.customMinigame['Wizard tower'].fateFail) Game.customMinigame['Wizard tower'].fateFail[i](choices);`, -1,
+			preEvalScript);
 		
 		
 		// M.launch
-		if(M.launch.toString().indexOf('// M.launch injection point 0') == -1){
+		if(Game.Objects['Wizard tower'].minigame.launch.toString().indexOf('// M.launch injection point 0') == -1){
 			CCSE.SliceCodeIntoFunction('M.launch', -1, `
-	// M.launch injection point 0
-	for(var i in Game.customMinigameOnLoad[objKey]) Game.customMinigameOnLoad[objKey][i](M.parent);
-`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+				// M.launch injection point 0
+				for(var i in Game.customMinigameOnLoad['Wizard tower']) Game.customMinigameOnLoad['Wizard tower'][i](M.parent);
+			`, preEvalScript);
 		}
 	}
 	
