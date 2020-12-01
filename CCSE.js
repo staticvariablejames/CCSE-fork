@@ -2168,154 +2168,145 @@ CCSE.launch = function(){
 	}
 	
 	CCSE.ReplaceMarket = function(){
-		// Temporary variable for storing function strings
-		// Slightly more efficient than nesting functions
-		// Doubt it really matters
-		var temp = '';
-		var pos = 0;
-		var proto;
-		var obj;
-		var objKey = 'Bank';
-		var M = Game.Objects[objKey].minigame;
-		
-		
+		var preEvalScript = "var M = Game.Objects['Bank'].minigame;";
+
 		// M.goodTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].goodTooltip) Game.customMinigame[objKey].goodTooltip = [];
+		if(!Game.customMinigame['Bank'].goodTooltip) Game.customMinigame['Bank'].goodTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.goodTooltip', 'return str', `
 			// M.goodTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].goodTooltip) str = Game.customMinigame[objKey].goodTooltip[i](id, str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].goodTooltip) str = Game.customMinigame['Bank'].goodTooltip[i](id, str);`, -1,
+			preEvalScript);
 		
 		
 		// M.tradeTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].tradeTooltip) Game.customMinigame[objKey].tradeTooltip = [];
+		if(!Game.customMinigame['Bank'].tradeTooltip) Game.customMinigame['Bank'].tradeTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.tradeTooltip', 'return str', `
 			// M.tradeTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].tradeTooltip) str = Game.customMinigame[objKey].tradeTooltip[i](id, n, str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].tradeTooltip) str = Game.customMinigame['Bank'].tradeTooltip[i](id, n, str);`, -1,
+			preEvalScript);
 		
 		
 		// M.goodDelta
 		// functions should return a value to multiply val by (Return 1 for no effect)
-		if(!Game.customMinigame[objKey].goodDelta) Game.customMinigame[objKey].goodDelta = [];
+		if(!Game.customMinigame['Bank'].goodDelta) Game.customMinigame['Bank'].goodDelta = [];
 		CCSE.ReplaceCodeIntoFunction('M.goodDelta', 'return', `
 			// M.goodDelta injection point 0
-			for(var i in Game.customMinigame[objKey].goodDelta) val *= Game.customMinigame[objKey].goodDelta[i](id, back);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].goodDelta) val *= Game.customMinigame['Bank'].goodDelta[i](id, back);`, -1,
+			preEvalScript);
 		
 		
 		// M.getGoodMaxStock
 		// functions should return an int value (Return ret for no effect)
-		if(!Game.customMinigame[objKey].getGoodMaxStock) Game.customMinigame[objKey].getGoodMaxStock = [];
+		if(!Game.customMinigame['Bank'].getGoodMaxStock) Game.customMinigame['Bank'].getGoodMaxStock = [];
 		CCSE.ReplaceCodeIntoFunction('M.getGoodMaxStock', 'return', 'var ret = ', 0,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.getGoodMaxStock', -1, `
 			// M.getGoodMaxStock injection point 0
-			for(var i in Game.customMinigame[objKey].getGoodMaxStock) ret = Game.customMinigame[objKey].getGoodMaxStock[i](good, ret);
+			for(var i in Game.customMinigame['Bank'].getGoodMaxStock) ret = Game.customMinigame['Bank'].getGoodMaxStock[i](good, ret);
 			return ret;
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+		`, preEvalScript);
 		
 		
 		// M.getGoodPrice
 		// functions should return a value to multiply val by (Return 1 for no effect)
-		if(!Game.customMinigame[objKey].getGoodPrice) Game.customMinigame[objKey].getGoodPrice = [];
+		if(!Game.customMinigame['Bank'].getGoodPrice) Game.customMinigame['Bank'].getGoodPrice = [];
 		CCSE.ReplaceCodeIntoFunction('M.getGoodPrice', 'return good.val;', 
 			`var val = good.val;
 			// M.getGoodPrice injection point 0
-			for(var i in Game.customMinigame[objKey].getGoodPrice) val *= Game.customMinigame[objKey].getGoodPrice[i](good);
+			for(var i in Game.customMinigame['Bank'].getGoodPrice) val *= Game.customMinigame['Bank'].getGoodPrice[i](good);
 			return val;`, 0,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			preEvalScript);
 		
 		
 		// M.buyGood
 		// functions that run when a good is purchased
-		if(!Game.customMinigame[objKey].buyGood) Game.customMinigame[objKey].buyGood = [];
+		if(!Game.customMinigame['Bank'].buyGood) Game.customMinigame['Bank'].buyGood = [];
 		CCSE.ReplaceCodeIntoFunction('M.buyGood', 'return true', `
 			// M.buyGood injection point 0
-			for(var i in Game.customMinigame[objKey].buyGood) Game.customMinigame[objKey].buyGood[i](id, n);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].buyGood) Game.customMinigame['Bank'].buyGood[i](id, n);`, -1,
+			preEvalScript);
 		
 		
 		// M.sellGood
 		// functions that run when a good is sold
-		if(!Game.customMinigame[objKey].sellGood) Game.customMinigame[objKey].sellGood = [];
+		if(!Game.customMinigame['Bank'].sellGood) Game.customMinigame['Bank'].sellGood = [];
 		CCSE.ReplaceCodeIntoFunction('M.sellGood', 'return true', `
 			// M.sellGood injection point 0
-			for(var i in Game.customMinigame[objKey].sellGood) Game.customMinigame[objKey].sellGood[i](id, n);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].sellGood) Game.customMinigame['Bank'].sellGood[i](id, n);`, -1,
+			preEvalScript);
 		
 		
 		// M.getRestingVal
 		// functions should return a number value (Return ret for no effect)
-		if(!Game.customMinigame[objKey].getRestingVal) Game.customMinigame[objKey].getRestingVal = [];
+		if(!Game.customMinigame['Bank'].getRestingVal) Game.customMinigame['Bank'].getRestingVal = [];
 		CCSE.ReplaceCodeIntoFunction('M.getRestingVal', 'return', 'var ret = ', 0,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.getRestingVal', '}', `
 			// M.getRestingVal injection point 0
-			for(var i in Game.customMinigame[objKey].getRestingVal) ret = Game.customMinigame[objKey].getRestingVal[i](id, ret);
+			for(var i in Game.customMinigame['Bank'].getRestingVal) ret = Game.customMinigame['Bank'].getRestingVal[i](id, ret);
 			return ret;
-		`, -1, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+		`, -1, preEvalScript);
 		
 		
 		// M.updateGoodStyle
-		if(!Game.customMinigame[objKey].updateGoodStyle) Game.customMinigame[objKey].updateGoodStyle = [];
+		if(!Game.customMinigame['Bank'].updateGoodStyle) Game.customMinigame['Bank'].updateGoodStyle = [];
 		CCSE.SliceCodeIntoFunction('M.updateGoodStyle', -1, `
 			// M.updateGoodStyle injection point 0
-			for(var i in Game.customMinigame[objKey].updateGoodStyle) Game.customMinigame[objKey].updateGoodStyle[i](id, me);
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].updateGoodStyle) Game.customMinigame['Bank'].updateGoodStyle[i](id, me);
+		`, preEvalScript);
 		
 		
 		// M.officeTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].officeTooltip) Game.customMinigame[objKey].officeTooltip = [];
+		if(!Game.customMinigame['Bank'].officeTooltip) Game.customMinigame['Bank'].officeTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.officeTooltip', 'return str', `
 			// M.officeTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].officeTooltip) str = Game.customMinigame[objKey].officeTooltip[i](me, str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].officeTooltip) str = Game.customMinigame['Bank'].officeTooltip[i](me, str);`, -1,
+			preEvalScript);
 		
 		
 		// M.getMaxBrokers
 		// functions should return an int value (Return ret for no effect)
-		if(!Game.customMinigame[objKey].getMaxBrokers) Game.customMinigame[objKey].getMaxBrokers = [];
+		if(!Game.customMinigame['Bank'].getMaxBrokers) Game.customMinigame['Bank'].getMaxBrokers = [];
 		CCSE.ReplaceCodeIntoFunction('M.getMaxBrokers', 'return', 'var ret = ', 0,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.getMaxBrokers', '}', `
 			// M.getMaxBrokers injection point 0
-			for(var i in Game.customMinigame[objKey].getMaxBrokers) ret = Game.customMinigame[objKey].getMaxBrokers[i](ret);
+			for(var i in Game.customMinigame['Bank'].getMaxBrokers) ret = Game.customMinigame['Bank'].getMaxBrokers[i](ret);
 			return ret;
-		`, -1, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+		`, -1, preEvalScript);
 		
 		
 		// M.getBrokerPrice
 		// functions should return an int value (Return ret for no effect)
-		if(!Game.customMinigame[objKey].getBrokerPrice) Game.customMinigame[objKey].getBrokerPrice = [];
+		if(!Game.customMinigame['Bank'].getBrokerPrice) Game.customMinigame['Bank'].getBrokerPrice = [];
 		CCSE.ReplaceCodeIntoFunction('M.getBrokerPrice', 'return', 'var ret = ', 0,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.getBrokerPrice', '}', `
 			// M.getBrokerPrice injection point 0
-			for(var i in Game.customMinigame[objKey].getBrokerPrice) ret = Game.customMinigame[objKey].getBrokerPrice[i](ret);
+			for(var i in Game.customMinigame['Bank'].getBrokerPrice) ret = Game.customMinigame['Bank'].getBrokerPrice[i](ret);
 			return ret;
-		`, -1, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+		`, -1, preEvalScript);
 		
 		
 		// M.brokersTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].brokersTooltip) Game.customMinigame[objKey].brokersTooltip = [];
+		if(!Game.customMinigame['Bank'].brokersTooltip) Game.customMinigame['Bank'].brokersTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.brokersTooltip', 'return str', `
 			// M.brokersTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].brokersTooltip) str = Game.customMinigame[objKey].brokersTooltip[i](str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].brokersTooltip) str = Game.customMinigame['Bank'].brokersTooltip[i](str);`, -1,
+			preEvalScript);
 		
 		
 		// M.loanTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].loanTooltip) Game.customMinigame[objKey].loanTooltip = [];
+		if(!Game.customMinigame['Bank'].loanTooltip) Game.customMinigame['Bank'].loanTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.loanTooltip', 'return str', `
 			// M.loanTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].loanTooltip) str = Game.customMinigame[objKey].loanTooltip[i](id, loan, str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].loanTooltip) str = Game.customMinigame['Bank'].loanTooltip[i](id, loan, str);`, -1,
+			preEvalScript);
 		
 		
 		// M.takeLoan
@@ -2324,48 +2315,48 @@ CCSE.launch = function(){
 		
 		// M.getOppSlots
 		// functions should return a value to add to slots (Return 0 for no effect)
-		if(!Game.customMinigame[objKey].getOppSlots) Game.customMinigame[objKey].getOppSlots = [];
+		if(!Game.customMinigame['Bank'].getOppSlots) Game.customMinigame['Bank'].getOppSlots = [];
 		CCSE.ReplaceCodeIntoFunction('M.getOppSlots', 'return', `
 			// M.getOppSlots injection point 0
-			for(var i in Game.customMinigame[objKey].getOppSlots) slots += Game.customMinigame[objKey].getOppSlots[i]();`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].getOppSlots) slots += Game.customMinigame['Bank'].getOppSlots[i]();`, -1,
+			preEvalScript);
 		
 		
 		// M.oppTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].oppTooltip) Game.customMinigame[objKey].oppTooltip = [];
+		if(!Game.customMinigame['Bank'].oppTooltip) Game.customMinigame['Bank'].oppTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.oppTooltip', 'return str', `
 			// M.oppTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].oppTooltip) str = Game.customMinigame[objKey].oppTooltip[i](str);`, -1,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			for(var i in Game.customMinigame['Bank'].oppTooltip) str = Game.customMinigame['Bank'].oppTooltip[i](str);`, -1,
+			preEvalScript);
 		
 		
 		// M.refillTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame[objKey].refillTooltip) Game.customMinigame[objKey].refillTooltip = [];
+		if(!Game.customMinigame['Bank'].refillTooltip) Game.customMinigame['Bank'].refillTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.refillTooltip', 'return', 'var str = ', 0,
-			"var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.refillTooltip', -1, `
 			// M.refillTooltip injection point 0
-			for(var i in Game.customMinigame[objKey].refillTooltip) str = Game.customMinigame[objKey].refillTooltip[i](id, str);
+			for(var i in Game.customMinigame['Bank'].refillTooltip) str = Game.customMinigame['Bank'].refillTooltip[i](id, str);
 			return str;
-		`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+		`, preEvalScript);
 		
 		
 		// M.tick
-		if(!Game.customMinigame[objKey].tick) Game.customMinigame[objKey].tick = [];
+		if(!Game.customMinigame['Bank'].tick) Game.customMinigame['Bank'].tick = [];
 		CCSE.SliceCodeIntoFunction('M.tick', -1, `
-		// M.tick injection point 0
-		for(var i in Game.customMinigame[objKey].tick) Game.customMinigame[objKey].tick[i]();
-	`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+			// M.tick injection point 0
+			for(var i in Game.customMinigame['Bank'].tick) Game.customMinigame['Bank'].tick[i]();
+		`, preEvalScript);
 		
 		
 		// M.launch
-		if(M.launch.toString().indexOf('// M.launch injection point 0') == -1){
+		if(Game.Objects['Bank'].minigame.launch.toString().indexOf('// M.launch injection point 0') == -1){
 			CCSE.SliceCodeIntoFunction('M.launch', -1, `
-	// M.launch injection point 0
-	for(var i in Game.customMinigameOnLoad[objKey]) Game.customMinigameOnLoad[objKey][i](M.parent);
-`, "var objKey = '" + objKey + "';var M = Game.Objects[objKey].minigame;");
+				// M.launch injection point 0
+				for(var i in Game.customMinigameOnLoad['Bank']) Game.customMinigameOnLoad['Bank'][i](M.parent);
+			`, preEvalScript);
 		}
 	}
 	
