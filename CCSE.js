@@ -4,7 +4,7 @@ CCSE.version = '2.experimental.2.1';
 CCSE.GameVersion = '2.031';
 
 CCSE.compatName = 'CCSE';
-CCSE.compatVersion = '2.020';
+CCSE.compatVersion = '2.021';
 /* This fork of CCSE is similar enough to the official CCSE
  * that we will actually try to hide this difference from other mods
  * (namely, in the invocation of CCSE.ConfirmGameCCSEVersion and family,
@@ -2069,22 +2069,25 @@ CCSE.launch = function(){
 	}
 	
 	CCSE.ReplaceGrimoire = function(){
-		var preEvalScript = "var M = Game.Objects['Wizard tower'].minigame;";
-
+		var objKey = "Wizard tower";
+		var M = Game.Objects[objKey].minigame;
+		var preEvalScript = "var M = Game.Objects['" + objKey + "'].minigame;";
+		
+		
 		// M.computeMagicM
-		if(!Game.customMinigame['Wizard tower'].computeMagicM) Game.customMinigame['Wizard tower'].computeMagicM = [];
+		if(!Game.customMinigame[objKey].computeMagicM) Game.customMinigame[objKey].computeMagicM = [];
 		CCSE.SliceCodeIntoFunction('M.computeMagicM', -1, `
 			// M.computeMagicM injection point 0
-			for(var i in Game.customMinigame['Wizard tower'].computeMagicM) Game.customMinigame['Wizard tower'].computeMagicM[i]();
+			for(var i in Game.customMinigame['` + objKey + `'].computeMagicM) Game.customMinigame['` + objKey + `'].computeMagicM[i]();
 		`, preEvalScript);
 		
 		
 		// M.getFailChance
 		// functions should return a value to multiply failChance by (Return 1 for no effect)
-		if(!Game.customMinigame['Wizard tower'].getFailChance) Game.customMinigame['Wizard tower'].getFailChance = [];
+		if(!Game.customMinigame[objKey].getFailChance) Game.customMinigame[objKey].getFailChance = [];
 		CCSE.ReplaceCodeIntoFunction('M.getFailChance', 'return', `
 			// M.getFailChance injection point 0
-			for(var i in Game.customMinigame['Wizard tower'].getFailChance) failChance *= Game.customMinigame['Wizard tower'].getFailChance[i](spell);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].getFailChance) failChance *= Game.customMinigame['` + objKey + `'].getFailChance[i](spell);`, -1,
 			preEvalScript);
 		
 		
@@ -2094,209 +2097,212 @@ CCSE.launch = function(){
 		
 		// M.getSpellCost
 		// functions should return a value to multiply out by (Return 1 for no effect)
-		if(!Game.customMinigame['Wizard tower'].getSpellCost) Game.customMinigame['Wizard tower'].getSpellCost = [];
+		if(!Game.customMinigame[objKey].getSpellCost) Game.customMinigame[objKey].getSpellCost = [];
 		CCSE.ReplaceCodeIntoFunction('M.getSpellCost', 'return', `
 			// M.getSpellCost injection point 0
-			for(var i in Game.customMinigame['Wizard tower'].getSpellCost) out *= Game.customMinigame['Wizard tower'].getSpellCost[i](spell);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].getSpellCost) out *= Game.customMinigame['` + objKey + `'].getSpellCost[i](spell);`, -1,
 			preEvalScript);
 		
 		
 		// M.getSpellCostBreakdown
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Wizard tower'].getSpellCostBreakdown) Game.customMinigame['Wizard tower'].getSpellCostBreakdown = [];
+		if(!Game.customMinigame[objKey].getSpellCostBreakdown) Game.customMinigame[objKey].getSpellCostBreakdown = [];
 		CCSE.ReplaceCodeIntoFunction('M.getSpellCostBreakdown', 'return', `
 			// M.getSpellCostBreakdown injection point 0
-			for(var i in Game.customMinigame['Wizard tower'].getSpellCostBreakdown) str = Game.customMinigame['Wizard tower'].getSpellCostBreakdown[i](spell, str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].getSpellCostBreakdown) str = Game.customMinigame['` + objKey + `'].getSpellCostBreakdown[i](spell, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.spellTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Wizard tower'].spellTooltip) Game.customMinigame['Wizard tower'].spellTooltip = [];
+		if(!Game.customMinigame[objKey].spellTooltip) Game.customMinigame[objKey].spellTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.spellTooltip', 'return str', `
 			// M.spellTooltip injection point 0
-			for(var i in Game.customMinigame['Wizard tower'].spellTooltip) str = Game.customMinigame['Wizard tower'].spellTooltip[i](id, str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].spellTooltip) str = Game.customMinigame['` + objKey + `'].spellTooltip[i](id, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.refillTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Wizard tower'].refillTooltip) Game.customMinigame['Wizard tower'].refillTooltip = [];
+		if(!Game.customMinigame[objKey].refillTooltip) Game.customMinigame[objKey].refillTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.refillTooltip', 'return', 'var str = ', 0,
 			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.refillTooltip', -1, `
 			// M.refillTooltip injection point 0
-			for(var i in Game.customMinigame['Wizard tower'].refillTooltip) str = Game.customMinigame['Wizard tower'].refillTooltip[i](id, str);
+			for(var i in Game.customMinigame['` + objKey + `'].refillTooltip) str = Game.customMinigame['` + objKey + `'].refillTooltip[i](id, str);
 			return str;
 		`, preEvalScript);
 		
 		
 		// M.spells['hand of fate'].win
 		// functions should push a value to choices
-		if(!Game.customMinigame['Wizard tower'].fateWin) Game.customMinigame['Wizard tower'].fateWin = [];
+		if(!Game.customMinigame[objKey].fateWin) Game.customMinigame[objKey].fateWin = [];
 		CCSE.ReplaceCodeIntoFunction('M.spells["hand of fate"].win', 'newShimmer.force', 
 					`// M.spells["hand of fate"].win injection point 0
-					for(var i in Game.customMinigame['Wizard tower'].fateWin) Game.customMinigame['Wizard tower'].fateWin[i](choices);`, -1,
+					for(var i in Game.customMinigame['` + objKey + `'].fateWin) Game.customMinigame['` + objKey + `'].fateWin[i](choices);`, -1,
 			preEvalScript);
 		
 		
 		// M.spells['hand of fate'].fail
 		// functions should push a value to choices
-		if(!Game.customMinigame['Wizard tower'].fateFail) Game.customMinigame['Wizard tower'].fateFail = [];
+		if(!Game.customMinigame[objKey].fateFail) Game.customMinigame[objKey].fateFail = [];
 		CCSE.ReplaceCodeIntoFunction('M.spells["hand of fate"].fail', 'newShimmer.force', 
 					`// M.spells["hand of fate"].fail injection point 0
-					for(var i in Game.customMinigame['Wizard tower'].fateFail) Game.customMinigame['Wizard tower'].fateFail[i](choices);`, -1,
+					for(var i in Game.customMinigame['` + objKey + `'].fateFail) Game.customMinigame['` + objKey + `'].fateFail[i](choices);`, -1,
 			preEvalScript);
 		
 		
 		// M.launch
-		if(Game.Objects['Wizard tower'].minigame.launch.toString().indexOf('// M.launch injection point 0') == -1){
+		if(M.launch.toString().indexOf('// M.launch injection point 0') == -1){
 			CCSE.SliceCodeIntoFunction('M.launch', -1, `
-				// M.launch injection point 0
-				for(var i in Game.customMinigameOnLoad['Wizard tower']) Game.customMinigameOnLoad['Wizard tower'][i](M.parent);
-			`, preEvalScript);
+	// M.launch injection point 0
+	for(var i in Game.customMinigameOnLoad['` + objKey + `']) Game.customMinigameOnLoad['` + objKey + `'][i](M.parent);
+`, preEvalScript);
 		}
 	}
 	
 	CCSE.ReplaceMarket = function(){
-		var preEvalScript = "var M = Game.Objects['Bank'].minigame;";
-
+		var objKey = "Bank";
+		var M = Game.Objects[objKey].minigame;
+		var preEvalScript = "var M = Game.Objects['" + objKey + "'].minigame;";
+		
+		
 		// M.goodTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Bank'].goodTooltip) Game.customMinigame['Bank'].goodTooltip = [];
+		if(!Game.customMinigame[objKey].goodTooltip) Game.customMinigame[objKey].goodTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.goodTooltip', 'return str', `
 			// M.goodTooltip injection point 0
-			for(var i in Game.customMinigame['Bank'].goodTooltip) str = Game.customMinigame['Bank'].goodTooltip[i](id, str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].goodTooltip) str = Game.customMinigame['` + objKey + `'].goodTooltip[i](id, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.tradeTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Bank'].tradeTooltip) Game.customMinigame['Bank'].tradeTooltip = [];
+		if(!Game.customMinigame[objKey].tradeTooltip) Game.customMinigame[objKey].tradeTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.tradeTooltip', 'return str', `
 			// M.tradeTooltip injection point 0
-			for(var i in Game.customMinigame['Bank'].tradeTooltip) str = Game.customMinigame['Bank'].tradeTooltip[i](id, n, str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].tradeTooltip) str = Game.customMinigame['` + objKey + `'].tradeTooltip[i](id, n, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.goodDelta
 		// functions should return a value to multiply val by (Return 1 for no effect)
-		if(!Game.customMinigame['Bank'].goodDelta) Game.customMinigame['Bank'].goodDelta = [];
+		if(!Game.customMinigame[objKey].goodDelta) Game.customMinigame[objKey].goodDelta = [];
 		CCSE.ReplaceCodeIntoFunction('M.goodDelta', 'return', `
 			// M.goodDelta injection point 0
-			for(var i in Game.customMinigame['Bank'].goodDelta) val *= Game.customMinigame['Bank'].goodDelta[i](id, back);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].goodDelta) val *= Game.customMinigame['` + objKey + `'].goodDelta[i](id, back);`, -1,
 			preEvalScript);
 		
 		
 		// M.getGoodMaxStock
 		// functions should return an int value (Return ret for no effect)
-		if(!Game.customMinigame['Bank'].getGoodMaxStock) Game.customMinigame['Bank'].getGoodMaxStock = [];
+		if(!Game.customMinigame[objKey].getGoodMaxStock) Game.customMinigame[objKey].getGoodMaxStock = [];
 		CCSE.ReplaceCodeIntoFunction('M.getGoodMaxStock', 'return', 'var ret = ', 0,
 			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.getGoodMaxStock', -1, `
 			// M.getGoodMaxStock injection point 0
-			for(var i in Game.customMinigame['Bank'].getGoodMaxStock) ret = Game.customMinigame['Bank'].getGoodMaxStock[i](good, ret);
+			for(var i in Game.customMinigame['` + objKey + `'].getGoodMaxStock) ret = Game.customMinigame['` + objKey + `'].getGoodMaxStock[i](good, ret);
 			return ret;
 		`, preEvalScript);
 		
 		
 		// M.getGoodPrice
 		// functions should return a value to multiply val by (Return 1 for no effect)
-		if(!Game.customMinigame['Bank'].getGoodPrice) Game.customMinigame['Bank'].getGoodPrice = [];
+		if(!Game.customMinigame[objKey].getGoodPrice) Game.customMinigame[objKey].getGoodPrice = [];
 		CCSE.ReplaceCodeIntoFunction('M.getGoodPrice', 'return good.val;', 
 			`var val = good.val;
 			// M.getGoodPrice injection point 0
-			for(var i in Game.customMinigame['Bank'].getGoodPrice) val *= Game.customMinigame['Bank'].getGoodPrice[i](good);
+			for(var i in Game.customMinigame['` + objKey + `'].getGoodPrice) val *= Game.customMinigame['` + objKey + `'].getGoodPrice[i](good);
 			return val;`, 0,
 			preEvalScript);
 		
 		
 		// M.buyGood
 		// functions that run when a good is purchased
-		if(!Game.customMinigame['Bank'].buyGood) Game.customMinigame['Bank'].buyGood = [];
+		if(!Game.customMinigame[objKey].buyGood) Game.customMinigame[objKey].buyGood = [];
 		CCSE.ReplaceCodeIntoFunction('M.buyGood', 'return true', `
 			// M.buyGood injection point 0
-			for(var i in Game.customMinigame['Bank'].buyGood) Game.customMinigame['Bank'].buyGood[i](id, n);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].buyGood) Game.customMinigame['` + objKey + `'].buyGood[i](id, n);`, -1,
 			preEvalScript);
 		
 		
 		// M.sellGood
 		// functions that run when a good is sold
-		if(!Game.customMinigame['Bank'].sellGood) Game.customMinigame['Bank'].sellGood = [];
+		if(!Game.customMinigame[objKey].sellGood) Game.customMinigame[objKey].sellGood = [];
 		CCSE.ReplaceCodeIntoFunction('M.sellGood', 'return true', `
 			// M.sellGood injection point 0
-			for(var i in Game.customMinigame['Bank'].sellGood) Game.customMinigame['Bank'].sellGood[i](id, n);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].sellGood) Game.customMinigame['` + objKey + `'].sellGood[i](id, n);`, -1,
 			preEvalScript);
 		
 		
 		// M.getRestingVal
 		// functions should return a number value (Return ret for no effect)
-		if(!Game.customMinigame['Bank'].getRestingVal) Game.customMinigame['Bank'].getRestingVal = [];
+		if(!Game.customMinigame[objKey].getRestingVal) Game.customMinigame[objKey].getRestingVal = [];
 		CCSE.ReplaceCodeIntoFunction('M.getRestingVal', 'return', 'var ret = ', 0,
 			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.getRestingVal', '}', `
 			// M.getRestingVal injection point 0
-			for(var i in Game.customMinigame['Bank'].getRestingVal) ret = Game.customMinigame['Bank'].getRestingVal[i](id, ret);
+			for(var i in Game.customMinigame['` + objKey + `'].getRestingVal) ret = Game.customMinigame['` + objKey + `'].getRestingVal[i](id, ret);
 			return ret;
 		`, -1, preEvalScript);
 		
 		
 		// M.updateGoodStyle
-		if(!Game.customMinigame['Bank'].updateGoodStyle) Game.customMinigame['Bank'].updateGoodStyle = [];
+		if(!Game.customMinigame[objKey].updateGoodStyle) Game.customMinigame[objKey].updateGoodStyle = [];
 		CCSE.SliceCodeIntoFunction('M.updateGoodStyle', -1, `
 			// M.updateGoodStyle injection point 0
-			for(var i in Game.customMinigame['Bank'].updateGoodStyle) Game.customMinigame['Bank'].updateGoodStyle[i](id, me);
+			for(var i in Game.customMinigame['` + objKey + `'].updateGoodStyle) Game.customMinigame['` + objKey + `'].updateGoodStyle[i](id, me);
 		`, preEvalScript);
 		
 		
 		// M.officeTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Bank'].officeTooltip) Game.customMinigame['Bank'].officeTooltip = [];
+		if(!Game.customMinigame[objKey].officeTooltip) Game.customMinigame[objKey].officeTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.officeTooltip', 'return str', `
 			// M.officeTooltip injection point 0
-			for(var i in Game.customMinigame['Bank'].officeTooltip) str = Game.customMinigame['Bank'].officeTooltip[i](me, str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].officeTooltip) str = Game.customMinigame['` + objKey + `'].officeTooltip[i](me, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.getMaxBrokers
 		// functions should return an int value (Return ret for no effect)
-		if(!Game.customMinigame['Bank'].getMaxBrokers) Game.customMinigame['Bank'].getMaxBrokers = [];
+		if(!Game.customMinigame[objKey].getMaxBrokers) Game.customMinigame[objKey].getMaxBrokers = [];
 		CCSE.ReplaceCodeIntoFunction('M.getMaxBrokers', 'return', 'var ret = ', 0,
 			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.getMaxBrokers', '}', `
 			// M.getMaxBrokers injection point 0
-			for(var i in Game.customMinigame['Bank'].getMaxBrokers) ret = Game.customMinigame['Bank'].getMaxBrokers[i](ret);
+			for(var i in Game.customMinigame['` + objKey + `'].getMaxBrokers) ret = Game.customMinigame['` + objKey + `'].getMaxBrokers[i](ret);
 			return ret;
 		`, -1, preEvalScript);
 		
 		
 		// M.getBrokerPrice
 		// functions should return an int value (Return ret for no effect)
-		if(!Game.customMinigame['Bank'].getBrokerPrice) Game.customMinigame['Bank'].getBrokerPrice = [];
+		if(!Game.customMinigame[objKey].getBrokerPrice) Game.customMinigame[objKey].getBrokerPrice = [];
 		CCSE.ReplaceCodeIntoFunction('M.getBrokerPrice', 'return', 'var ret = ', 0,
 			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.getBrokerPrice', '}', `
 			// M.getBrokerPrice injection point 0
-			for(var i in Game.customMinigame['Bank'].getBrokerPrice) ret = Game.customMinigame['Bank'].getBrokerPrice[i](ret);
+			for(var i in Game.customMinigame['` + objKey + `'].getBrokerPrice) ret = Game.customMinigame['` + objKey + `'].getBrokerPrice[i](ret);
 			return ret;
 		`, -1, preEvalScript);
 		
 		
 		// M.brokersTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Bank'].brokersTooltip) Game.customMinigame['Bank'].brokersTooltip = [];
+		if(!Game.customMinigame[objKey].brokersTooltip) Game.customMinigame[objKey].brokersTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.brokersTooltip', 'return str', `
 			// M.brokersTooltip injection point 0
-			for(var i in Game.customMinigame['Bank'].brokersTooltip) str = Game.customMinigame['Bank'].brokersTooltip[i](str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].brokersTooltip) str = Game.customMinigame['` + objKey + `'].brokersTooltip[i](str);`, -1,
 			preEvalScript);
 		
 		
 		// M.loanTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Bank'].loanTooltip) Game.customMinigame['Bank'].loanTooltip = [];
+		if(!Game.customMinigame[objKey].loanTooltip) Game.customMinigame[objKey].loanTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.loanTooltip', 'return str', `
 			// M.loanTooltip injection point 0
-			for(var i in Game.customMinigame['Bank'].loanTooltip) str = Game.customMinigame['Bank'].loanTooltip[i](id, loan, str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].loanTooltip) str = Game.customMinigame['` + objKey + `'].loanTooltip[i](id, loan, str);`, -1,
 			preEvalScript);
 		
 		
@@ -2306,109 +2312,112 @@ CCSE.launch = function(){
 		
 		// M.getOppSlots
 		// functions should return a value to add to slots (Return 0 for no effect)
-		if(!Game.customMinigame['Bank'].getOppSlots) Game.customMinigame['Bank'].getOppSlots = [];
+		if(!Game.customMinigame[objKey].getOppSlots) Game.customMinigame[objKey].getOppSlots = [];
 		CCSE.ReplaceCodeIntoFunction('M.getOppSlots', 'return', `
 			// M.getOppSlots injection point 0
-			for(var i in Game.customMinigame['Bank'].getOppSlots) slots += Game.customMinigame['Bank'].getOppSlots[i]();`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].getOppSlots) slots += Game.customMinigame['` + objKey + `'].getOppSlots[i]();`, -1,
 			preEvalScript);
 		
 		
 		// M.oppTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Bank'].oppTooltip) Game.customMinigame['Bank'].oppTooltip = [];
+		if(!Game.customMinigame[objKey].oppTooltip) Game.customMinigame[objKey].oppTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.oppTooltip', 'return str', `
 			// M.oppTooltip injection point 0
-			for(var i in Game.customMinigame['Bank'].oppTooltip) str = Game.customMinigame['Bank'].oppTooltip[i](str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].oppTooltip) str = Game.customMinigame['` + objKey + `'].oppTooltip[i](str);`, -1,
 			preEvalScript);
 		
 		
 		// M.refillTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Bank'].refillTooltip) Game.customMinigame['Bank'].refillTooltip = [];
+		if(!Game.customMinigame[objKey].refillTooltip) Game.customMinigame[objKey].refillTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.refillTooltip', 'return', 'var str = ', 0,
 			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.refillTooltip', -1, `
 			// M.refillTooltip injection point 0
-			for(var i in Game.customMinigame['Bank'].refillTooltip) str = Game.customMinigame['Bank'].refillTooltip[i](id, str);
+			for(var i in Game.customMinigame['` + objKey + `'].refillTooltip) str = Game.customMinigame['` + objKey + `'].refillTooltip[i](id, str);
 			return str;
 		`, preEvalScript);
 		
 		
 		// M.tick
-		if(!Game.customMinigame['Bank'].tick) Game.customMinigame['Bank'].tick = [];
+		if(!Game.customMinigame[objKey].tick) Game.customMinigame[objKey].tick = [];
 		CCSE.SliceCodeIntoFunction('M.tick', -1, `
-			// M.tick injection point 0
-			for(var i in Game.customMinigame['Bank'].tick) Game.customMinigame['Bank'].tick[i]();
-		`, preEvalScript);
+		// M.tick injection point 0
+		for(var i in Game.customMinigame['` + objKey + `'].tick) Game.customMinigame['` + objKey + `'].tick[i]();
+	`, preEvalScript);
 		
 		
 		// M.launch
-		if(Game.Objects['Bank'].minigame.launch.toString().indexOf('// M.launch injection point 0') == -1){
+		if(M.launch.toString().indexOf('// M.launch injection point 0') == -1){
 			CCSE.SliceCodeIntoFunction('M.launch', -1, `
-				// M.launch injection point 0
-				for(var i in Game.customMinigameOnLoad['Bank']) Game.customMinigameOnLoad['Bank'][i](M.parent);
-			`, preEvalScript);
+	// M.launch injection point 0
+	for(var i in Game.customMinigameOnLoad['` + objKey + `']) Game.customMinigameOnLoad['` + objKey + `'][i](M.parent);
+`, preEvalScript);
 		}
 	}
 	
 	CCSE.ReplacePantheon = function(){
-		var preEvalScript = "var M = Game.Objects['Temple'].minigame;";
+		var objKey = "Temple";
+		var M = Game.Objects[objKey].minigame;
+		var preEvalScript = "var M = Game.Objects['" + objKey + "'].minigame;";
+		
 		
 		// M.godTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Temple'].godTooltip) Game.customMinigame['Temple'].godTooltip = [];
+		if(!Game.customMinigame[objKey].godTooltip) Game.customMinigame[objKey].godTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.godTooltip', 'return str', `
 			// M.godTooltip injection point 0
-			for(var i in Game.customMinigame['Temple'].godTooltip) str = Game.customMinigame['Temple'].godTooltip[i](id, str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].godTooltip) str = Game.customMinigame['` + objKey + `'].godTooltip[i](id, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.slotTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Temple'].slotTooltip) Game.customMinigame['Temple'].slotTooltip = [];
+		if(!Game.customMinigame[objKey].slotTooltip) Game.customMinigame[objKey].slotTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.slotTooltip', 'return str', `
 			// M.slotTooltip injection point 0
-			for(var i in Game.customMinigame['Temple'].slotTooltip) str = Game.customMinigame['Temple'].slotTooltip[i](id, str);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].slotTooltip) str = Game.customMinigame['` + objKey + `'].slotTooltip[i](id, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.useSwap
-		if(!Game.customMinigame['Temple'].useSwap) Game.customMinigame['Temple'].useSwap = [];
+		if(!Game.customMinigame[objKey].useSwap) Game.customMinigame[objKey].useSwap = [];
 		CCSE.SliceCodeIntoFunction('M.useSwap', -1, `
 			// M.useSwap injection point 0
-			for(var i in Game.customMinigame['Temple'].useSwap) Game.customMinigame['Temple'].useSwap[i](n);
+			for(var i in Game.customMinigame['` + objKey + `'].useSwap) Game.customMinigame['` + objKey + `'].useSwap[i](n);
 		`, preEvalScript);
 		
 		
 		// M.slotGod
-		if(!Game.customMinigame['Temple'].slotGod) Game.customMinigame['Temple'].slotGod = [];
+		if(!Game.customMinigame[objKey].slotGod) Game.customMinigame[objKey].slotGod = [];
 		CCSE.SliceCodeIntoFunction('M.slotGod', -1, `
 			// M.slotGod injection point 0
-			for(var i in Game.customMinigame['Temple'].slotGod) Game.customMinigame['Temple'].slotGod[i](god, slot);
+			for(var i in Game.customMinigame['` + objKey + `'].slotGod) Game.customMinigame['` + objKey + `'].slotGod[i](god, slot);
 		`, preEvalScript);
 		
 		
 		// M.dragGod
-		if(!Game.customMinigame['Temple'].dragGod) Game.customMinigame['Temple'].dragGod = [];
+		if(!Game.customMinigame[objKey].dragGod) Game.customMinigame[objKey].dragGod = [];
 		CCSE.SliceCodeIntoFunction('M.dragGod', -1, `
 			// M.dragGod injection point 0
-			for(var i in Game.customMinigame['Temple'].dragGod) Game.customMinigame['Temple'].dragGod[i](what);
+			for(var i in Game.customMinigame['` + objKey + `'].dragGod) Game.customMinigame['` + objKey + `'].dragGod[i](what);
 		`, preEvalScript);
 		
 		
 		// M.dropGod
-		if(!Game.customMinigame['Temple'].dropGod) Game.customMinigame['Temple'].dropGod = [];
+		if(!Game.customMinigame[objKey].dropGod) Game.customMinigame[objKey].dropGod = [];
 		CCSE.SliceCodeIntoFunction('M.dropGod', -1, `
 			// M.dropGod injection point 0
-			for(var i in Game.customMinigame['Temple'].dropGod) Game.customMinigame['Temple'].dropGod[i]();
+			for(var i in Game.customMinigame['` + objKey + `'].dropGod) Game.customMinigame['` + objKey + `'].dropGod[i]();
 		`, preEvalScript);
 		
 		
 		// M.hoverSlot
-		if(!Game.customMinigame['Temple'].hoverSlot) Game.customMinigame['Temple'].hoverSlot = [];
+		if(!Game.customMinigame[objKey].hoverSlot) Game.customMinigame[objKey].hoverSlot = [];
 		CCSE.SliceCodeIntoFunction('M.hoverSlot', -1, `
 			// M.hoverSlot injection point 0
-			for(var i in Game.customMinigame['Temple'].hoverSlot) Game.customMinigame['Temple'].hoverSlot[i](what);
+			for(var i in Game.customMinigame['` + objKey + `'].hoverSlot) Game.customMinigame['` + objKey + `'].hoverSlot[i](what);
 		`, preEvalScript);
 		
 		
@@ -2418,76 +2427,79 @@ CCSE.launch = function(){
 		
 		// M.refillTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Temple'].refillTooltip) Game.customMinigame['Temple'].refillTooltip = [];
+		if(!Game.customMinigame[objKey].refillTooltip) Game.customMinigame[objKey].refillTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.refillTooltip', 'return', 'var str = ', 0,
 			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.refillTooltip', -1, `
 			// M.refillTooltip injection point 0
-			for(var i in Game.customMinigame['Temple'].refillTooltip) str = Game.customMinigame['Temple'].refillTooltip[i](id, str);
+			for(var i in Game.customMinigame['` + objKey + `'].refillTooltip) str = Game.customMinigame['` + objKey + `'].refillTooltip[i](id, str);
 			return str;
 		`, preEvalScript);
 		
 		
 		// M.launch
-		if(Game.Objects['Temple'].minigame.launch.toString().indexOf('// M.launch injection point 0') == -1){
+		if(M.launch.toString().indexOf('// M.launch injection point 0') == -1){
 			CCSE.SliceCodeIntoFunction('M.launch', -1, `
-				// M.launch injection point 0
-				for(var i in Game.customMinigameOnLoad['Temple']) Game.customMinigameOnLoad['Temple'][i](M.parent);
-			`, preEvalScript);
+	// M.launch injection point 0
+	for(var i in Game.customMinigameOnLoad['` + objKey + `']) Game.customMinigameOnLoad['` + objKey + `'][i](M.parent);
+`, preEvalScript);
 		}
 	}
 	
 	CCSE.ReplaceGarden = function(){
-		var preEvalScript = "var M = Game.Objects['Farm'].minigame;";
-
+		var objKey = "Farm";
+		var M = Game.Objects[objKey].minigame;
+		var preEvalScript = "var M = Game.Objects['" + objKey + "'].minigame;";
+		
+		
 		// M.getUnlockedN
-		if(!Game.customMinigame['Farm'].getUnlockedN) Game.customMinigame['Farm'].getUnlockedN = [];
+		if(!Game.customMinigame[objKey].getUnlockedN) Game.customMinigame[objKey].getUnlockedN = [];
 		CCSE.ReplaceCodeIntoFunction('M.getUnlockedN', 'return', 
 			`// M.getUnlockedN injection point 0
-			for(var i in Game.customMinigame['Farm'].getUnlockedN) Game.customMinigame['Farm'].getUnlockedN[i]();`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].getUnlockedN) Game.customMinigame['` + objKey + `'].getUnlockedN[i]();`, -1,
 			preEvalScript);
 		
 		
 		// M.dropUpgrade
-		if(!Game.customMinigame['Farm'].dropUpgrade) Game.customMinigame['Farm'].dropUpgrade = [];
+		if(!Game.customMinigame[objKey].dropUpgrade) Game.customMinigame[objKey].dropUpgrade = [];
 		CCSE.SliceCodeIntoFunction('M.dropUpgrade', -1, 
 			`// M.dropUpgrade injection point 0
-			for(var i in Game.customMinigame['Farm'].dropUpgrade) Game.customMinigame['Farm'].dropUpgrade[i](upgrade, rate);
+			for(var i in Game.customMinigame['` + objKey + `'].dropUpgrade) Game.customMinigame['` + objKey + `'].dropUpgrade[i](upgrade, rate);
 		`, preEvalScript);
 		
 		
 		// M.computeMatures
-		if(!Game.customMinigame['Farm'].computeMatures) Game.customMinigame['Farm'].computeMatures = [];
+		if(!Game.customMinigame[objKey].computeMatures) Game.customMinigame[objKey].computeMatures = [];
 		CCSE.SliceCodeIntoFunction('M.computeMatures', -1, 
 			`// M.computeMatures injection point 0
-			for(var i in Game.customMinigame['Farm'].computeMatures) Game.customMinigame['Farm'].computeMatures[i](mult);
+			for(var i in Game.customMinigame['` + objKey + `'].computeMatures) Game.customMinigame['` + objKey + `'].computeMatures[i](mult);
 		`, preEvalScript);
 		
 		
 		// M.getMuts
 		// functions should push mutations to muts
-		if(!Game.customMinigame['Farm'].getMuts) Game.customMinigame['Farm'].getMuts = [];
+		if(!Game.customMinigame[objKey].getMuts) Game.customMinigame[objKey].getMuts = [];
 		CCSE.ReplaceCodeIntoFunction('M.getMuts', 'return', 
 			`// M.getMuts injection point 0
-			for(var i in Game.customMinigame['Farm'].getMuts) Game.customMinigame['Farm'].getMuts[i](neighs, neighsM, muts);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].getMuts) Game.customMinigame['` + objKey + `'].getMuts[i](neighs, neighsM, muts);`, -1,
 			preEvalScript);
 		
 		
 		// M.computeBoostPlot
 		// You're going to have to use MAXIMUM EFFORT
-		if(!Game.customMinigame['Farm'].computeBoostPlot) Game.customMinigame['Farm'].computeBoostPlot = [];
+		if(!Game.customMinigame[objKey].computeBoostPlot) Game.customMinigame[objKey].computeBoostPlot = [];
 		CCSE.SliceCodeIntoFunction('M.computeBoostPlot', -1, 
 			`// M.computeBoostPlot injection point 0
-			for(var i in Game.customMinigame['Farm'].computeBoostPlot) Game.customMinigame['Farm'].computeBoostPlot[i]();
+			for(var i in Game.customMinigame['` + objKey + `'].computeBoostPlot) Game.customMinigame['` + objKey + `'].computeBoostPlot[i]();
 		`, preEvalScript);
 		
 		
 		// M.computeEffs
 		// functions should change effs (or not, I'm a comment, not a cop)
-		if(!Game.customMinigame['Farm'].computeEffs) Game.customMinigame['Farm'].computeEffs = [];
+		if(!Game.customMinigame[objKey].computeEffs) Game.customMinigame[objKey].computeEffs = [];
 		CCSE.ReplaceCodeIntoFunction('M.computeEffs', 'M.effs=effs;', 
 			`// M.computeEffs injection point 0
-			for(var i in Game.customMinigame['Farm'].computeEffs) Game.customMinigame['Farm'].computeEffs[i](effs);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].computeEffs) Game.customMinigame['` + objKey + `'].computeEffs[i](effs);`, -1,
 			preEvalScript);
 		
 		
@@ -2499,46 +2511,46 @@ CCSE.launch = function(){
 		
 		// M.getPlantDesc
 		// Return ret for no effect
-		if(!Game.customMinigame['Farm'].getPlantDesc) Game.customMinigame['Farm'].getPlantDesc = [];
+		if(!Game.customMinigame[objKey].getPlantDesc) Game.customMinigame[objKey].getPlantDesc = [];
 		CCSE.ReplaceCodeIntoFunction('M.getPlantDesc', 'return', 'var ret = ', 0,
 			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.getPlantDesc', -1, 
 				`// M.getPlantDesc injection point 0
-				for(var i in Game.customMinigame['Farm'].getPlantDesc) ret = Game.customMinigame['Farm'].getPlantDesc[i](me, ret);
+				for(var i in Game.customMinigame['` + objKey + `'].getPlantDesc) ret = Game.customMinigame['` + objKey + `'].getPlantDesc[i](me, ret);
 				return ret;
 			`, preEvalScript);
 		
 		
 		// M.soilTooltip
 		// Return str for no effect
-		if(!Game.customMinigame['Farm'].soilTooltip) Game.customMinigame['Farm'].soilTooltip = [];
+		if(!Game.customMinigame[objKey].soilTooltip) Game.customMinigame[objKey].soilTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.soilTooltip', 'return str;', 
 				`// M.soilTooltip injection point 0
-				for(var i in Game.customMinigame['Farm'].soilTooltip) str = Game.customMinigame['Farm'].soilTooltip[i](id, str);`, -1,
+				for(var i in Game.customMinigame['` + objKey + `'].soilTooltip) str = Game.customMinigame['` + objKey + `'].soilTooltip[i](id, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.seedTooltip
 		// Return str for no effect
-		if(!Game.customMinigame['Farm'].seedTooltip) Game.customMinigame['Farm'].seedTooltip = [];
+		if(!Game.customMinigame[objKey].seedTooltip) Game.customMinigame[objKey].seedTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.seedTooltip', 'return str;', 
 				`// M.seedTooltip injection point 0
-				for(var i in Game.customMinigame['Farm'].seedTooltip) str = Game.customMinigame['Farm'].seedTooltip[i](id, str);`, -1,
+				for(var i in Game.customMinigame['` + objKey + `'].seedTooltip) str = Game.customMinigame['` + objKey + `'].seedTooltip[i](id, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.toolTooltip
 		// Return str for no effect
-		if(!Game.customMinigame['Farm'].toolTooltip) Game.customMinigame['Farm'].toolTooltip = [];
+		if(!Game.customMinigame[objKey].toolTooltip) Game.customMinigame[objKey].toolTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.toolTooltip', 'return str;', 
 				`// M.toolTooltip injection point 0
-				for(var i in Game.customMinigame['Farm'].toolTooltip) str = Game.customMinigame['Farm'].toolTooltip[i](id, str);`, -1,
+				for(var i in Game.customMinigame['` + objKey + `'].toolTooltip) str = Game.customMinigame['` + objKey + `'].toolTooltip[i](id, str);`, -1,
 			preEvalScript);
 		
 		
 		// M.tileTooltip
 		// Return ret for no effect
-		if(!Game.customMinigame['Farm'].tileTooltip) Game.customMinigame['Farm'].tileTooltip = [];
+		if(!Game.customMinigame[objKey].tileTooltip) Game.customMinigame[objKey].tileTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.tileTooltip', 'return function(){', `return function(){
 				var ret = '';`, 0,
 			preEvalScript);
@@ -2546,44 +2558,44 @@ CCSE.launch = function(){
 			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.tileTooltip', '};', 
 				`// M.tileTooltip injection point 0
-				for(var i in Game.customMinigame['Farm'].tileTooltip) ret = Game.customMinigame['Farm'].tileTooltip[i](x, y, ret);
+				for(var i in Game.customMinigame['` + objKey + `'].tileTooltip) ret = Game.customMinigame['` + objKey + `'].tileTooltip[i](x, y, ret);
 				return ret;`, -1,
 			preEvalScript);
 		
 		
 		// M.refillTooltip
 		// functions should return a string value (Return str for no effect)
-		if(!Game.customMinigame['Farm'].refillTooltip) Game.customMinigame['Farm'].refillTooltip = [];
+		if(!Game.customMinigame[objKey].refillTooltip) Game.customMinigame[objKey].refillTooltip = [];
 		CCSE.ReplaceCodeIntoFunction('M.refillTooltip', 'return', 'var str = ', 0,
 			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.refillTooltip', -1, `
 			// M.refillTooltip injection point 0
-			for(var i in Game.customMinigame['Farm'].refillTooltip) str = Game.customMinigame['Farm'].refillTooltip[i](id, str);
+			for(var i in Game.customMinigame['` + objKey + `'].refillTooltip) str = Game.customMinigame['` + objKey + `'].refillTooltip[i](id, str);
 			return str;
 		`, preEvalScript);
 		
 		
 		// M.buildPanel
-		if(!Game.customMinigame['Farm'].buildPanel) Game.customMinigame['Farm'].buildPanel = [];
+		if(!Game.customMinigame[objKey].buildPanel) Game.customMinigame[objKey].buildPanel = [];
 		CCSE.SliceCodeIntoFunction('M.buildPanel', -1, 
 			`// M.buildPanel injection point 0
-			for(var i in Game.customMinigame['Farm'].buildPanel) Game.customMinigame['Farm'].buildPanel[i]();
+			for(var i in Game.customMinigame['` + objKey + `'].buildPanel) Game.customMinigame['` + objKey + `'].buildPanel[i]();
 		`, preEvalScript);
 		
 		
 		// M.buildPlot
-		if(!Game.customMinigame['Farm'].buildPlot) Game.customMinigame['Farm'].buildPlot = [];
+		if(!Game.customMinigame[objKey].buildPlot) Game.customMinigame[objKey].buildPlot = [];
 		CCSE.SliceCodeIntoFunction('M.buildPlot', -1, 
 			`// M.buildPlot injection point 0
-			for(var i in Game.customMinigame['Farm'].buildPlot) Game.customMinigame['Farm'].buildPlot[i]();
+			for(var i in Game.customMinigame['` + objKey + `'].buildPlot) Game.customMinigame['` + objKey + `'].buildPlot[i]();
 		`, preEvalScript);
 		
 		
 		// M.clickTile
-		if(!Game.customMinigame['Farm'].clickTile) Game.customMinigame['Farm'].clickTile = [];
+		if(!Game.customMinigame[objKey].clickTile) Game.customMinigame[objKey].clickTile = [];
 		CCSE.SliceCodeIntoFunction('M.clickTile', -1, 
 			`// M.clickTile injection point 0
-			for(var i in Game.customMinigame['Farm'].clickTile) Game.customMinigame['Farm'].clickTile[i](x, y);
+			for(var i in Game.customMinigame['` + objKey + `'].clickTile) Game.customMinigame['` + objKey + `'].clickTile[i](x, y);
 		`, preEvalScript);
 		
 		
@@ -2592,7 +2604,7 @@ CCSE.launch = function(){
 		
 		// M.getTile
 		// Return ret to have no effect
-		if(!Game.customMinigame['Farm'].getTile) Game.customMinigame['Farm'].getTile = [];
+		if(!Game.customMinigame[objKey].getTile) Game.customMinigame[objKey].getTile = [];
 		CCSE.ReplaceCodeIntoFunction('M.getTile', '{', 'var ret;', 1,
 			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.getTile', 'return', 'ret =', 0,
@@ -2601,79 +2613,79 @@ CCSE.launch = function(){
 			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.getTile', -1, 
 			`// M.getTile injection point 0
-			for(var i in Game.customMinigame['Farm'].getTile) ret = Game.customMinigame['Farm'].getTile[i](x, y, ret);
+			for(var i in Game.customMinigame['` + objKey + `'].getTile) ret = Game.customMinigame['` + objKey + `'].getTile[i](x, y, ret);
 			return ret;
 		`, preEvalScript);
 		
 		
 		// M.getTile
 		// Return ret to have no effect
-		if(!Game.customMinigame['Farm'].isTileUnlocked) Game.customMinigame['Farm'].isTileUnlocked = []; 
+		if(!Game.customMinigame[objKey].isTileUnlocked) Game.customMinigame[objKey].isTileUnlocked = []; 
 		CCSE.ReplaceCodeIntoFunction('M.isTileUnlocked', '{', 'var ret;', 1,
 			preEvalScript);
 		CCSE.ReplaceCodeIntoFunction('M.isTileUnlocked', /return/g, 'ret =', 0,
 			preEvalScript);
 		CCSE.SliceCodeIntoFunction('M.isTileUnlocked', -1, 
 			`// M.isTileUnlocked injection point 0
-			for(var i in Game.customMinigame['Farm'].isTileUnlocked) ret = Game.customMinigame['Farm'].isTileUnlocked[i](x, y, ret);
+			for(var i in Game.customMinigame['` + objKey + `'].isTileUnlocked) ret = Game.customMinigame['` + objKey + `'].isTileUnlocked[i](x, y, ret);
 			return ret;
 		`, preEvalScript);
 		
 		
 		// M.computeStepT
-		if(!Game.customMinigame['Farm'].computeStepT) Game.customMinigame['Farm'].computeStepT = [];
+		if(!Game.customMinigame[objKey].computeStepT) Game.customMinigame[objKey].computeStepT = [];
 		CCSE.SliceCodeIntoFunction('M.computeStepT', -1, 
 			`// M.computeStepT injection point 0
-			for(var i in Game.customMinigame['Farm'].computeStepT) Game.customMinigame['Farm'].computeStepT[i]();
+			for(var i in Game.customMinigame['` + objKey + `'].computeStepT) Game.customMinigame['` + objKey + `'].computeStepT[i]();
 		`, preEvalScript);
 		
 		
 		// M.convert
-		if(!Game.customMinigame['Farm'].convert) Game.customMinigame['Farm'].convert = [];
+		if(!Game.customMinigame[objKey].convert) Game.customMinigame[objKey].convert = [];
 		CCSE.SliceCodeIntoFunction('M.convert', -1, 
 			`// M.convert injection point 0
-			for(var i in Game.customMinigame['Farm'].convert) Game.customMinigame['Farm'].convert[i]();
+			for(var i in Game.customMinigame['` + objKey + `'].convert) Game.customMinigame['` + objKey + `'].convert[i]();
 		`, preEvalScript);
 		
 		
 		// M.harvestAll
-		if(!Game.customMinigame['Farm'].harvestAll) Game.customMinigame['Farm'].harvestAll = [];
+		if(!Game.customMinigame[objKey].harvestAll) Game.customMinigame[objKey].harvestAll = [];
 		CCSE.SliceCodeIntoFunction('M.harvestAll', -1, 
 			`// M.harvestAll injection point 0
-			for(var i in Game.customMinigame['Farm'].harvestAll) Game.customMinigame['Farm'].harvestAll[i](type, mature, mortal);
+			for(var i in Game.customMinigame['` + objKey + `'].harvestAll) Game.customMinigame['` + objKey + `'].harvestAll[i](type, mature, mortal);
 		`, preEvalScript);
 		
 		
 		// M.harvest
-		if(!Game.customMinigame['Farm'].harvest) Game.customMinigame['Farm'].harvest = [];
+		if(!Game.customMinigame[objKey].harvest) Game.customMinigame[objKey].harvest = [];
 		CCSE.ReplaceCodeIntoFunction('M.harvest', 'return true;', 
 				`// M.harvest injection point 0
-				for(var i in Game.customMinigame['Farm'].harvest) Game.customMinigame['Farm'].harvest[i](x, y, manual);`, -1,
+				for(var i in Game.customMinigame['` + objKey + `'].harvest) Game.customMinigame['` + objKey + `'].harvest[i](x, y, manual);`, -1,
 			preEvalScript);
 		
 		
 		// M.unlockSeed
-		if(!Game.customMinigame['Farm'].unlockSeed) Game.customMinigame['Farm'].unlockSeed = [];
+		if(!Game.customMinigame[objKey].unlockSeed) Game.customMinigame[objKey].unlockSeed = [];
 		CCSE.ReplaceCodeIntoFunction('M.unlockSeed', 'return true;', 
 			`// M.unlockSeed injection point 0
-			for(var i in Game.customMinigame['Farm'].unlockSeed) Game.customMinigame['Farm'].unlockSeed[i](me);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].unlockSeed) Game.customMinigame['` + objKey + `'].unlockSeed[i](me);`, -1,
 			preEvalScript);
 		
 		
 		// M.lockSeed
-		if(!Game.customMinigame['Farm'].lockSeed) Game.customMinigame['Farm'].lockSeed = [];
+		if(!Game.customMinigame[objKey].lockSeed) Game.customMinigame[objKey].lockSeed = [];
 		CCSE.ReplaceCodeIntoFunction('M.lockSeed', 'return true;', 
 			`// M.lockSeed injection point 0
-			for(var i in Game.customMinigame['Farm'].lockSeed) Game.customMinigame['Farm'].lockSeed[i](me);`, -1,
+			for(var i in Game.customMinigame['` + objKey + `'].lockSeed) Game.customMinigame['` + objKey + `'].lockSeed[i](me);`, -1,
 			preEvalScript);
 		
 		
 		// M.launch
-		if(Game.Objects['Farm'].minigame.launch.toString().indexOf('// M.launch injection point 0') == -1){
+		if(M.launch.toString().indexOf('// M.launch injection point 0') == -1){
 			CCSE.SliceCodeIntoFunction('M.launch', -1, `
-				// M.launch injection point 0
-				for(var i in Game.customMinigameOnLoad['Farm']) Game.customMinigameOnLoad['Farm'][i](M.parent);
-			`, preEvalScript);
+	// M.launch injection point 0
+	for(var i in Game.customMinigameOnLoad['` + objKey + `']) Game.customMinigameOnLoad['` + objKey + `'][i](M.parent);
+`, preEvalScript);
 		}
 	}
 	
